@@ -187,6 +187,7 @@
       z-index: 50;
       max-height: 80vh;
       overflow-y: auto;
+      display: none; /* Masquer par défaut */
     }
     
     /* Overlay pour fermer le menu en cliquant à l'extérieur */
@@ -198,6 +199,12 @@
       bottom: 0;
       background-color: rgba(0,0,0,0.5);
       z-index: 40;
+      display: none; /* Masquer par défaut */
+    }
+    
+    /* Masquer les éléments Alpine.js non initialisés */
+    [x-cloak] {
+      display: none !important;
     }
   </style>
 </head>
@@ -237,7 +244,11 @@
   </script>
 
   <!-- En-tête avec menu mobile amélioré -->
-  <div x-data="{ mobileMenuOpen: false, scrolled: false }" @scroll.window="scrolled = window.pageYOffset > 10" @keydown.escape="mobileMenuOpen = false">
+  <div 
+    x-data="{ mobileMenuOpen: false, scrolled: false }" 
+    x-init="mobileMenuOpen = false"
+    @scroll.window="scrolled = window.pageYOffset > 10" 
+    @keydown.escape="mobileMenuOpen = false">
     <!-- En-tête fixe -->
     <header :class="{ 'py-2 bg-primary-900 shadow-lg': scrolled, 'py-3 bg-primary-900 bg-opacity-90': !scrolled }" class="fixed w-full top-0 z-50 transition-all duration-300">
       <div class="container mx-auto px-4 flex justify-between items-center">
@@ -268,6 +279,7 @@
     <!-- Overlay pour fermer le menu mobile en cliquant à l'extérieur -->
     <div 
       class="mobile-menu-overlay" 
+      x-cloak
       x-show="mobileMenuOpen" 
       @click="mobileMenuOpen = false"
       x-transition:enter="transition ease-out duration-200"
@@ -281,6 +293,7 @@
     <!-- Menu mobile amélioré -->
     <div 
       class="mobile-menu md:hidden bg-primary-800 shadow-xl" 
+      x-cloak
       x-show="mobileMenuOpen"
       x-transition:enter="transition ease-out duration-300"
       x-transition:enter-start="opacity-0 transform -translate-y-4"
@@ -955,6 +968,15 @@
   <script>
     // Animation au défilement
     document.addEventListener('DOMContentLoaded', function() {
+      // S'assurer que le menu est fermé au chargement de la page
+      if (typeof Alpine !== 'undefined') {
+        document.querySelectorAll('[x-data]').forEach(el => {
+          if (el.__x && el.__x.$data.mobileMenuOpen !== undefined) {
+            el.__x.$data.mobileMenuOpen = false;
+          }
+        });
+      }
+      
       const scrollElements = document.querySelectorAll('.scroll-fade');
       
       const elementInView = (el, percentageScroll = 100) => {
