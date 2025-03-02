@@ -130,10 +130,12 @@
     }
 
     /* Mask pour créer la forme de vague en bas des sections */
+    /* Ce style est conservé mais nous supprimons l'élément en lui-même */
     .wave-divider {
       position: relative;
       height: 70px;
       margin-top: -70px;
+      display: none; /* Masquer complètement les wave-dividers */
     }
     .wave-divider svg {
       position: absolute;
@@ -269,9 +271,10 @@
           <span class="font-semibold phone-number">02 54 84 06 11</span>
         </a>
         
+        <!-- Correction : Ajout de x-cloak pour l'icône de fermeture -->
         <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-white focus:outline-none z-50">
           <i class="fas fa-bars text-xl" x-show="!mobileMenuOpen"></i>
-          <i class="fas fa-times text-xl" x-show="mobileMenuOpen"></i>
+          <i class="fas fa-times text-xl" x-show="mobileMenuOpen" x-cloak></i>
         </button>
       </div>
     </header>
@@ -368,12 +371,7 @@
       </div>
     </div>
     
-    <!-- Vague de séparation -->
-    <div class="wave-divider text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <path fill-opacity="1" d="M0,128L48,138.7C96,149,192,171,288,176C384,181,480,171,576,144C672,117,768,75,864,64C960,53,1056,75,1152,90.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-      </svg>
-    </div>
+    <!-- Vague de séparation SUPPRIMÉE pour corriger le problème d'affichage -->
   </section>
 
   <!-- Section de services -->
